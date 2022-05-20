@@ -138,9 +138,11 @@ const App = ({ route, navigation }: Props) => {
         console.log('[BLE_STATUS connect error]', error);
         return;
       }
+      console.log('[BLE_STATUS connect device]', device);
       if (
         device && 
-        device.localName == 'WiFiBLEDevice' &&
+        // device.localName == 'WiFiBLEDevice' &&
+        device.name == 'My BLE Tester' &&
         arrOfDevices &&
         arrOfDevices.findIndex(
           (deviceItem: Device) => deviceItem.id === device?.id,

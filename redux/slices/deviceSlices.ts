@@ -1,14 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Device } from "react-native-ble-plx";
+import { Characteristic, Device, Service } from "react-native-ble-plx";
+
+export interface ServiceWithCharacteristics extends Service {
+  fetchedCharacteristics?: Characteristic[]
+}
 
 export interface DeviceState {
   devices: Device[],
-  selectedDevice: Device | null
+  selectedDevice: Device | null,
+  services: ServiceWithCharacteristics[],
+  servicesLoading: boolean
 }
 
 const initialState: DeviceState = {
   devices: [],
-  selectedDevice: null
+  selectedDevice: null,
+  services: [],
+  servicesLoading: false,
 }
 
 const deviceSlices = createSlice({
@@ -21,8 +29,27 @@ const deviceSlices = createSlice({
     setSelectedDevice: (state: DeviceState, action: PayloadAction<Device>) => {
       state.selectedDevice = action.payload;
     },
+    setServices: (state: DeviceState, action: PayloadAction<ServiceWithCharacteristics[]>) => {
+      state.services = action.payload;
+    },
+    setServicesLoading: (state: DeviceState, action: PayloadAction<boolean>) => {
+      state.servicesLoading = action.payload;
+    },
+    updateValueOfCharacteristic: (state: DeviceState, action: PayloadAction<{serviceId: string, characteristicId: string, value: string}>) => {
+      const updatedServices = [...state.services];
+      updatedServices.forEach((serviceItem) => {
+        if (serviceItem.uuid === action.payload.serviceId) {
+          serviceItem.fetchedCharacteristics?.forEach((characteristicItem) => {
+            if (characteristicItem.uuid === action.payload.characteristicId) {
+              characteristicItem.value = action.payload.value;
+            }
+        })
+        }
+      })
+      state.services = [...updatedServices];
+    },
   }
 })
 
 export const deviceReducer = deviceSlices.reducer;
-export const { setDevices, setSelectedDevice } = deviceSlices.actions;
+export const { setDevices, setSelectedDevice, setServices, setServicesLoading, updateValueOfCharacteristic } = deviceSlices.actions;
