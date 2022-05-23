@@ -9,7 +9,8 @@ export interface DeviceState {
   devices: Device[],
   selectedDevice: Device | null,
   services: ServiceWithCharacteristics[],
-  servicesLoading: boolean
+  servicesLoading: boolean,
+  isDeviceConnected: boolean
 }
 
 const initialState: DeviceState = {
@@ -17,6 +18,7 @@ const initialState: DeviceState = {
   selectedDevice: null,
   services: [],
   servicesLoading: false,
+  isDeviceConnected: false
 }
 
 const deviceSlices = createSlice({
@@ -35,6 +37,9 @@ const deviceSlices = createSlice({
     setServicesLoading: (state: DeviceState, action: PayloadAction<boolean>) => {
       state.servicesLoading = action.payload;
     },
+    setIsDeviceConnected: (state: DeviceState, action: PayloadAction<boolean>) => {
+      state.isDeviceConnected = action.payload;
+    },
     updateValueOfCharacteristic: (state: DeviceState, action: PayloadAction<{serviceId: string, characteristicId: string, value: string}>) => {
       const updatedServices = [...state.services];
       updatedServices.forEach((serviceItem) => {
@@ -52,4 +57,4 @@ const deviceSlices = createSlice({
 })
 
 export const deviceReducer = deviceSlices.reducer;
-export const { setDevices, setSelectedDevice, setServices, setServicesLoading, updateValueOfCharacteristic } = deviceSlices.actions;
+export const { setDevices, setSelectedDevice, setServices, setServicesLoading, updateValueOfCharacteristic, setIsDeviceConnected } = deviceSlices.actions;

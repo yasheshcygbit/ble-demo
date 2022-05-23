@@ -19,6 +19,7 @@ import {
   useColorScheme,
   View,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {BleError, BleManager, Device, State} from 'react-native-ble-plx';
 import {
@@ -40,6 +41,7 @@ let bleManager = new BleManager();
 
 const App = ({ route, navigation }: Props) => {
   let arrOfDevices: Device[] = [];
+  const [nameOfDevice, setNameOfDevice] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const isDarkMode = useColorScheme() === 'dark';
   const [isPoweredOn, setIsPoweredOn] = useState<boolean>(false);
@@ -141,8 +143,7 @@ const App = ({ route, navigation }: Props) => {
       console.log('[BLE_STATUS connect device]', device);
       if (
         device && 
-        // device.localName == 'WiFiBLEDevice' &&
-        device.name == 'My BLE Tester' &&
+        (device.localName == nameOfDevice || device.name == nameOfDevice) &&
         arrOfDevices &&
         arrOfDevices.findIndex(
           (deviceItem: Device) => deviceItem.id === device?.id,
@@ -207,14 +208,23 @@ const App = ({ route, navigation }: Props) => {
                       </Text>
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity
-                      style={[styles.button]}
-                      activeOpacity={0.8}
-                      onPress={() => scanAndConnect()}>
-                      <Text ellipsizeMode="tail" numberOfLines={1} style={[]}>
-                        Start Scanning
-                      </Text>
-                    </TouchableOpacity>
+                    <View style={[]}>
+                      <TextInput
+                        placeholder="Enter Name Of Bluetooth Deivce to Connect to"
+                        placeholderTextColor='rgba(0, 0, 0, 0.5)'
+                        value={nameOfDevice}
+                        onChangeText={(text: string) => setNameOfDevice(text)}
+                        style={[styles.modalTextInut]}
+                      />
+                      <TouchableOpacity
+                        style={[styles.button]}
+                        activeOpacity={0.8}
+                        onPress={() => scanAndConnect()}>
+                        <Text ellipsizeMode="tail" numberOfLines={1} style={[]}>
+                          Start Scanning
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   )}
                 </View>
                 <View style={[styles.devicesList]}>
@@ -324,7 +334,7 @@ const styles = StyleSheet.create({
   },
   topHeader: {
     flexDirection: 'row',
-    height: 60,
+    // height: 60,
     backgroundColor: '#fff',
     alignItems: 'center',
     // borderBottomColor: 'rgba(0, 0, 0, 0.8)',
@@ -381,7 +391,15 @@ const styles = StyleSheet.create({
   buttonCont: {
     flex: 0,
     paddingVertical: 10
-  }
+  },
+  modalTextInut: {
+    height: 50,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.2)',
+    marginBottom: 10,
+    color: '#000'
+  },
 });
 
 export default App;
