@@ -190,14 +190,6 @@ const App = ({ route, navigation }: Props) => {
             {isPermissionGranted ? (
               <>
                 <View style={[styles.topHeader]}>
-                  {/* <View style={[styles.topHeaderTextCont]}>
-                    <Text
-                      ellipsizeMode="tail"
-                      numberOfLines={1}
-                      style={[styles.topHeaderText]}>
-                      All Devices
-                    </Text>
-                  </View> */}
                   {isScanning ? (
                     <TouchableOpacity
                       style={[styles.button]}

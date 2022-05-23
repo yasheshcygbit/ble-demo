@@ -103,60 +103,6 @@ const App = ({ route, navigation }: Props) => {
     }
   }, [selectedDevice])
 
-  // const connectToDevice = () => {
-  //   let deviceId = '';
-  //   let serviceUuid = '';
-  //   let characteristicUuid = '';
-  //   if (selectedDevice) {
-  //     selectedDevice.connect()
-  //     .then((device: Device) => {
-  //       return device.discoverAllServicesAndCharacteristics()
-  //     })
-  //     .then((device) => {
-  //       console.log('[CONNECT device]', JSON.stringify(device));
-  //       deviceId = device.id;
-  //       return bleManager.servicesForDevice(device.id)
-  //     })
-  //     .then((services: Service[]) => {
-  //       console.log('[CONNECT services]', JSON.stringify(services));
-  //       const arrOfServiceUUids: string[] = [];
-  //       services.forEach((serviceItem) => {
-  //         arrOfServiceUUids.push(serviceItem.uuid);
-  //       })
-  //       serviceUuid = services[2].uuid;
-  //       return bleManager.characteristicsForDevice(selectedDevice?.id, services[2].uuid)
-  //       // }
-  //     })
-  //     .then((characteristicsForDevice: Characteristic[]) => {
-  //       console.log('[CONNECT characteristicsForDevice]', JSON.stringify(characteristicsForDevice));
-  //       characteristicsForDevice.forEach((characteristicItem: Characteristic) => {
-  //         if (characteristicItem.isWritableWithResponse) {
-  //           characteristicUuid = characteristicItem.uuid;
-  //         }
-  //       })
-  //       const batteryLevelBuffer = Buffer.from('Hello')
-  //       return bleManager.writeCharacteristicWithResponseForDevice(deviceId, serviceUuid, characteristicUuid, batteryLevelBuffer.toString('base64'))
-  //     })
-  //     .then((characteristicAfterWrite: Characteristic) => {
-  //       console.log('[CONNECT characteristicAfterWrite]', JSON.stringify(characteristicAfterWrite));
-  //       if (characteristicAfterWrite.value) {
-  //         const heightInCentimeters = Buffer.from(characteristicAfterWrite.value, 'base64').toString();
-  //         console.log('[CONNECT heightInCentimeters]', JSON.stringify(heightInCentimeters));
-  //       }
-  //       return bleManager.readCharacteristicForDevice(deviceId, serviceUuid, characteristicAfterWrite.uuid);
-  //     })
-  //     .then((characteristicAfterRead: Characteristic) => {
-  //       if (characteristicAfterRead.value) {
-  //         const heightInCentimeters = Buffer.from(characteristicAfterRead.value, 'base64').toString();
-  //         console.log('[CONNECT characteristicAfterRead]', JSON.stringify(characteristicAfterRead));
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log('[CONNECT error]', error);
-  //     });
-  //   }
-  // };
-
   const getLatestValue = async (serviceId: string, characteristicId: string) => {
     if (selectedDevice) {
       const latestCharacteristics = await bleManager.readCharacteristicForDevice(selectedDevice.id, serviceId, characteristicId);
